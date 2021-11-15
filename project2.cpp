@@ -3,8 +3,28 @@
 #include <stdio.h>
 #include <vector>
 #include <algorithm>
+#include <queue>
 
 using namespace std;
+
+queue<double> solution;
+
+void setSolution(vector<double> seq1, int seq1_len, vector<double> seq2, int seq2_len, vector<double> target, vector<vector<double>> &array, int x, int y)
+{
+    if (x + y == target.size())
+        return;
+    else if ( (array[x][y] - (seq1[x] * target[x + y]) - array[x + 1][y] ) < .000000001 && x != seq1_len)
+    {
+        solution.push(seq1[x]);
+        setSolution(seq1, seq1_len, seq2, seq2_len, target, array, x + 1, y);
+    }
+    else if ( (array[x][y] - (seq2[y] * target[x + y]) - array[x][y + 1] ) < .000000001 && y != seq2_len)
+    {
+        solution.push(seq2[y]);
+        setSolution(seq1, seq1_len, seq2, seq2_len, target, array, x, y + 1);
+    }
+    return;
+}
 
 double maxAlignment(vector<double> seq1, int seq1_len, vector<double> seq2, int seq2_len, vector<double> target, vector<vector<double>> &array, int x, int y)
 {
@@ -50,6 +70,8 @@ double maxAlignmentWrapper(vector<double> seq1, int seq1_len, vector<double> seq
 
     double max = maxAlignment(seq1, seq1_len, seq2, seq2_len, target, array, 0, 0);
 
+    setSolution(seq1, seq1_len, seq2, seq2_len, target, array, 0, 0);
+
     return max;
 }
 
@@ -74,6 +96,7 @@ int main()
     }
     while (input_file >> buffer) {
         buffer_vector.push_back(buffer);
+//        cout << "buffer: " << buffer << endl;
     }
     input_file.close();
 
@@ -85,4 +108,11 @@ int main()
 
     double max = maxAlignmentWrapper(seq1, seq1_len, seq2, seq2_len, target);
     cout << max << endl;
+
+    while(!solution.empty())
+    {
+        cout << solution.front() << " ";
+        solution.pop();
+    }
+    cout << endl;
 }
