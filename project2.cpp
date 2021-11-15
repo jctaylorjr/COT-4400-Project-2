@@ -104,8 +104,11 @@ vector<double> GetSubVector(vector<double> buffer_vector, double start,
 
 int main(int argc, char *argv[])
 {
+	//if a text file is used as an argument, it will read from it as the input,
+	//otherwise input.txt is the default
 	string file_name = "input.txt";
-	if (argc > 1) {
+	if (argc > 1)
+	{
 		file_name = argv[1];
 	}
 
