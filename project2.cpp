@@ -6,6 +6,7 @@
 #include <queue>
 #include <regex>
 #include <string>
+#include <streambuf>
 
 using namespace std;
 
@@ -86,28 +87,34 @@ vector<double> GetSubVector(vector<double> buffer_vector, double start, double s
 
 int main()
 {
-    //read file and fill: seq1_len, seq2_len, seq1, seq2, and target
-    double buffer;
+    //vector to store all number from input.txt
     vector<double> buffer_vector;
 
-    // read file and fill: seq1_len, seq2_len, seq1, seq2, and target
-    ifstream input_file;
-    input_file.open("input.txt");
-    if (!input_file.is_open()) {
-        return 1;
-    }
-    while (input_file >> buffer) {
-        buffer_vector.push_back(buffer);
-        cout << "buffer: " << buffer << endl;
-    }
-    input_file.close();
+    //defining regular expressions to extract numbers and remove whitespace
+    regex number_input("(-?\\s*\\d+\\.?\\d*)");
+    regex whitespace("\\s*");
+    smatch match;
 
+    //reading input.txt file and converting it to a single string
+    ifstream input_stream("input.txt");
+    string input_file_text((std::istreambuf_iterator<char>(input_stream)),
+                std::istreambuf_iterator<char>());
+
+    //regular expression loops through and get every number and negative sign and discards whitespace
+    //so that seperated number and negative signs can be joined. Converted to double and put in vector.
+    while (regex_search (input_file_text, match, number_input)) {
+        buffer_vector.push_back(stod(regex_replace(match.str(), whitespace, "")));
+        input_file_text = match.suffix();
+    }
+
+    //lengths of subvectors, subvectors, and target vector are copied out of buffer_vector
     int seq1_len = int(buffer_vector.at(0));
     int seq2_len = int(buffer_vector.at(1));
     vector<double> seq1 = GetSubVector(buffer_vector, 2, 2 + seq1_len, seq1_len); //start = 2, stop = 4, size = 3;
     vector<double> seq2 = GetSubVector(buffer_vector, 2 + seq1_len, 2 + seq1_len + seq2_len, seq2_len); //start = 5, stop = 7, size = 3;
     vector<double> target = GetSubVector(buffer_vector, 2 + seq1_len + seq2_len, 2 + seq1_len * 2 + seq2_len * 2, seq1_len + seq2_len); //start = 8, stop =13, size = 3;
 
+    //results are output to text file
     ofstream output_file;
     output_file.open("output.txt");
     if(!output_file.is_open()){
