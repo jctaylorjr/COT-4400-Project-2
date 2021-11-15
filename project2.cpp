@@ -96,7 +96,7 @@ int main()
     }
     while (input_file >> buffer) {
         buffer_vector.push_back(buffer);
-//        cout << "buffer: " << buffer << endl;
+        cout << "buffer: " << buffer << endl;
     }
     input_file.close();
 
@@ -106,13 +106,22 @@ int main()
     vector<double> seq2 = GetSubVector(buffer_vector, 2 + seq1_len, 2 + seq1_len + seq2_len, seq2_len); //start = 5, stop = 7, size = 3;
     vector<double> target = GetSubVector(buffer_vector, 2 + seq1_len + seq2_len, 2 + seq1_len * 2 + seq2_len * 2, seq1_len + seq2_len); //start = 8, stop =13, size = 3;
 
+    ofstream output_file;
+    output_file.open("output.txt");
+    if(!output_file.is_open()){
+        return 1;
+    }
     double max = maxAlignmentWrapper(seq1, seq1_len, seq2, seq2_len, target);
     cout << max << endl;
+    output_file << max << endl;
 
     while(!solution.empty())
     {
         cout << solution.front() << " ";
+        output_file << solution.front() << " ";
         solution.pop();
     }
     cout << endl;
+
+    output_file.close();
 }
