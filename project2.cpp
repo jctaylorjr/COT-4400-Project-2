@@ -102,8 +102,13 @@ vector<double> GetSubVector(vector<double> buffer_vector, double start,
 	return temp;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+	string file_name = "input.txt";
+	if (argc > 1) {
+		file_name = argv[1];
+	}
+
 	// vector to store all number from input.txt
 	vector<double> buffer_vector;
 
@@ -113,7 +118,7 @@ int main()
 	smatch match;
 
 	// reading input.txt file and converting it to a single string
-	ifstream input_stream("input.txt");
+	ifstream input_stream(file_name);
 	string input_file_text((std::istreambuf_iterator<char>(input_stream)),
 						   std::istreambuf_iterator<char>());
 
