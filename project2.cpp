@@ -4,6 +4,8 @@
 #include <vector>
 #include <algorithm>
 #include <queue>
+#include <regex>
+#include <string>
 
 using namespace std;
 
