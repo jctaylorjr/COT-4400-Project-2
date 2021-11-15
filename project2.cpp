@@ -92,6 +92,7 @@ double maxAlignmentWrapper(vector<double> seq1, int seq1_len,
 	return max;
 }
 
+//splice of given vector is copied to temp vector and then returned
 vector<double> GetSubVector(vector<double> buffer_vector, double start,
 							double stop, double size)
 {
@@ -125,16 +126,18 @@ int main()
 		input_file_text = match.suffix();
 	}
 
-	// lengths of subvectors, subvectors, and target vector are copied out of
-	// buffer_vector
+	//getting lengths for subvectors
 	int seq1_len = int(buffer_vector.at(0));
 	int seq2_len = int(buffer_vector.at(1));
+	//getting seq1 subvector
 	vector<double> seq1 =
 		GetSubVector(buffer_vector, 2, 2 + seq1_len,
 					 seq1_len);
+	//getting seq2 subvector
 	vector<double> seq2 =
 		GetSubVector(buffer_vector, 2 + seq1_len, 2 + seq1_len + seq2_len,
 					 seq2_len);
+	//getting target vector
 	vector<double> target = GetSubVector(
 		buffer_vector, 2 + seq1_len + seq2_len, 2 + seq1_len * 2 + seq2_len * 2,
 		seq1_len + seq2_len);
